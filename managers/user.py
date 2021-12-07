@@ -1,9 +1,8 @@
-from psycopg2.errorcodes import UNIQUE_VIOLATION
-from werkzeug.exceptions import BadRequest, InternalServerError
+from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import db
-from models.user import ComplainerModel
+from models.user import ComplainerModel, ApproverModel
 
 
 class UserManager:
@@ -12,13 +11,7 @@ class UserManager:
         user_data["password"] = generate_password_hash(user_data["password"])
         user = ComplainerModel(**user_data)
         db.session.add(user)
-        try:
-            db.session.commit()
-        except Exception as ex:
-            if ex.orig.pgcode == UNIQUE_VIOLATION:
-                raise BadRequest("Please login")
-            else:
-                InternalServerError("Server is unavailable. Please try again later")
+        db.session.flush()
         return user
 
     @staticmethod
@@ -29,5 +22,16 @@ class UserManager:
 
         if not check_password_hash(user.password, user_data["password"]):
             raise BadRequest("Wrong email or password")
+
+        return user
+
+    @staticmethod
+    def login_approver(user_data):
+        user = ApproverModel.query.filter_by(email=user_data["email"]).first()
+        if not user:
+            raise BadRequest("Wrong email or password")
+
+        # if not check_password_hash(user.password, user_data["password"]):
+        #     raise BadRequest("Wrong email or password")
 
         return user

@@ -10,6 +10,10 @@ class ComplainerLoginRequestSchema(BaseUserSchema):
     pass
 
 
+class ApproverLoginRequestSchema(BaseUserSchema):
+    pass
+
+
 class ComplainerRegisterRequestSchema(BaseUserSchema):
     first_name = fields.String(required=True, validate=validate.Length(min=2, max=255))
     last_name = fields.String(required=True, validate=validate.Length(min=2, max=255))
