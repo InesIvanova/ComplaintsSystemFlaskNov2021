@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from psycopg2.errorcodes import UNIQUE_VIOLATION
 from werkzeug.exceptions import BadRequest, InternalServerError
-
+from flask_cors import CORS
 from config import DevApplication
 from db import db
 from resources.routes import routes
@@ -13,6 +13,7 @@ app.config.from_object(DevApplication)
 db.init_app(app)
 
 migrate = Migrate(app, db)
+CORS(app)
 api = Api(app)
 
 [api.add_resource(*r) for r in routes]

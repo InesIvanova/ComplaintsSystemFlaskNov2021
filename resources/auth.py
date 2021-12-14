@@ -24,7 +24,7 @@ class Login(Resource):
     def post(self):
         user = UserManager.login(request.get_json())
         token = AuthManager.encode_token(user)
-        return {"token": token}, 200
+        return {"token": token, "role": "complainer"}, 200
 
 
 class LoginApprover(Resource):
@@ -32,4 +32,4 @@ class LoginApprover(Resource):
     def post(self):
         user = UserManager.login_approver(request.get_json())
         token = AuthManager.encode_token(user)
-        return {"token": token}, 200
+        return {"token": token, "role": "approver"}, 200

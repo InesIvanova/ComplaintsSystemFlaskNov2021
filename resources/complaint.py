@@ -12,7 +12,6 @@ from util.decorators import validate_schema, permission_required
 class ListCreateComplaint(Resource):
     @auth.login_required
     def get(self):
-        # TODO add logic for different roles
         complaints = ComplaintManager.get_all()
         schema = ComplaintCreateResponseSchema()
         return schema.dump(complaints, many=True)
@@ -49,7 +48,7 @@ class ComplaintDetail(Resource):
 class ApproveComplaint(Resource):
     @auth.login_required
     @permission_required(RoleType.approver)
-    def get(self, id_):
+    def put(self, id_):
         complaint = ComplaintManager.approve(id_)
         schema = ComplaintCreateResponseSchema()
         return schema.dump(complaint)
@@ -58,7 +57,7 @@ class ApproveComplaint(Resource):
 class RejectComplaint(Resource):
     @auth.login_required
     # @permission_required(RoleType.approver)
-    def get(self, id_):
+    def put(self, id_):
         complaint = ComplaintManager.reject(id_)
         schema = ComplaintCreateResponseSchema()
         return schema.dump(complaint)
