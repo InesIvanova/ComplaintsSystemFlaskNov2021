@@ -7,12 +7,14 @@ from models.enums import RoleType
 from schemas.request.complaint import ComplaintCreateRequestSchema
 from schemas.response.complaint import ComplaintCreateResponseSchema
 from util.decorators import validate_schema, permission_required
+from util.helpers import process_query_filters
 
 
 class ListCreateComplaint(Resource):
     @auth.login_required
     def get(self):
-        complaints = ComplaintManager.get_all()
+        filters = process_query_filters(dict(request.args))
+        complaints = ComplaintManager.get_all(filters)
         schema = ComplaintCreateResponseSchema()
         return schema.dump(complaints, many=True)
 

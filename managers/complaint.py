@@ -19,13 +19,14 @@ s3 = S3Service()
 
 class ComplaintManager:
     @staticmethod
-    def get_all():
+    def get_all(filters):
         current_user = auth.current_user()
+        q = ComplaintModel.query.filter_by(**filters)
         if current_user.role == RoleType.complainer:
-            return ComplaintModel.query.filter_by(complainer_id=current_user.id).all()
+            q = q.filter_by(complainer_id=current_user.id)
         elif current_user.role == RoleType.approver:
-            return ComplaintModel.query.filter_by(status=State.pending).all()
-        return ComplaintModel.query.all()
+            q = q.filter_by(status=State.pending)
+        return q.all()
 
     @staticmethod
     def issue_transaction(amount, full_name, iban, complaint_id):
