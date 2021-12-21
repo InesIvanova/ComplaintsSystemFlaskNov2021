@@ -25,13 +25,10 @@ class ListCreateComplaint(Resource):
         current_user = auth.current_user()
         complaint = ComplaintManager.create(request.get_json(), current_user)
         schema = ComplaintCreateResponseSchema()
-        return schema.dump(complaint)
+        return schema.dump(complaint), 201
 
 
 class ComplaintDetail(Resource):
-    def get(self, id_):
-        pass
-
     @auth.login_required
     @permission_required(RoleType.complainer)
     @validate_schema(ComplaintCreateRequestSchema)
