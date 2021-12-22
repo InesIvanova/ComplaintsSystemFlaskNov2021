@@ -55,3 +55,28 @@ class TestAuth(TestCase):
             "role": RoleType.complainer,
             **data,
         }
+
+    def test_user_already_exists_raises(self):
+        url = "/register"
+        data = {
+            "email": "ines@kenova3.com",
+            "password": "123456",
+            "first_name": "Ines",
+            "last_name": "Kenova",
+            "phone": "1234567890123",
+            "iban": "BG80BNBG96611020345678",
+        }
+
+        resp = self.client.post(
+            url, data=json.dumps(data), headers={"Content-Type": "application/json"}
+        )
+
+        assert resp.status_code == 201
+
+        # Make the same request but user already exists
+
+        resp = self.client.post(
+            url, data=json.dumps(data), headers={"Content-Type": "application/json"}
+        )
+        assert resp.status_code == 400
+        assert resp.json == {"message": "Please login"}

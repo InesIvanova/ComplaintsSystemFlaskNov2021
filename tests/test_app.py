@@ -49,4 +49,3 @@ class TestApplication(TestCase):
         # ADMIN endpoints with complainer token -
         # they should return
         pass
-

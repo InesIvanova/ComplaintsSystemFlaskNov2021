@@ -14,4 +14,3 @@ def generate_data():
 def test_object_generation():
     data = generate_data()
     assert data["id"] == "11111111"
-

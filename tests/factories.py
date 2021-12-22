@@ -27,4 +27,3 @@ class ComplainerFactory(BaseFactory):
     password = factory.Faker("password")
     iban = factory.Faker("iban")
     role = RoleType.complainer
-
